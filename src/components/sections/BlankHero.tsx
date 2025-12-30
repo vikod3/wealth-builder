@@ -1,16 +1,65 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
+import { useEffect, useRef } from "react";
+import Hls from "hls.js";
 
 const BlankHero = () => {
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const videoSrc = "https://customer-cbeadsgr09pnsezs.cloudflarestream.com/6571025a2e02041c8b85dbd43210fa3a/manifest/video.m3u8";
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    if (Hls.isSupported()) {
+      const hls = new Hls({
+        enableWorker: true,
+        lowLatencyMode: true,
+      });
+      hls.loadSource(videoSrc);
+      hls.attachMedia(video);
+      hls.on(Hls.Events.MANIFEST_PARSED, () => {
+        video.play().catch(() => {
+          // Autoplay was prevented, that's okay
+        });
+      });
+
+      return () => {
+        hls.destroy();
+      };
+    } else if (video.canPlayType("application/vnd.apple.mpegurl")) {
+      // Native HLS support (Safari)
+      video.src = videoSrc;
+      video.addEventListener("loadedmetadata", () => {
+        video.play().catch(() => {});
+      });
+    }
+  }, []);
+
   return (
-    <section className="relative flex min-h-screen flex-col items-center justify-center px-6 pt-24 pb-16 md:px-12 lg:px-20">
-      <div className="mx-auto flex max-w-[1240px] flex-col items-center gap-6">
+    <section className="relative flex min-h-screen flex-col items-center justify-center px-6 pt-24 pb-16 md:px-12 lg:px-20 overflow-hidden">
+      {/* Video Background */}
+      <div className="absolute inset-0 z-0">
+        <video
+          ref={videoRef}
+          autoPlay
+          muted
+          loop
+          playsInline
+          className="h-full w-full object-cover"
+        />
+        {/* Dark overlay for text readability */}
+        <div className="absolute inset-0 bg-background/60" />
+      </div>
+
+      {/* Content */}
+      <div className="relative z-10 mx-auto flex max-w-[1240px] flex-col items-center gap-6">
         {/* Badge */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="inline-flex items-center justify-center gap-1 rounded-full border border-foreground/40 px-3 py-1"
+          className="inline-flex items-center justify-center gap-1 rounded-full border border-foreground/40 px-3 py-1 backdrop-blur-sm"
         >
           <span className="text-sm font-medium text-foreground">
             Real-Time Budget Tracking
