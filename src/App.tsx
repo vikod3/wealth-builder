@@ -11,6 +11,7 @@ import PricingPage from "./pages/PricingPage";
 import FAQPage from "./pages/FAQPage";
 import ContactPage from "./pages/ContactPage";
 import AboutPage from "./pages/AboutPage";
+import BlankPage from "./pages/BlankPage";
 import NotFound from "./pages/NotFound";
 import lightImage from "@/assets/light.png";
 
@@ -37,6 +38,7 @@ const App = () => (
           <Route path="/faq" element={<FAQPage />} />
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/about" element={<AboutPage />} />
+          <Route path="/blank" element={<BlankPage />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
