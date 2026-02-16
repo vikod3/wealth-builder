@@ -28,7 +28,7 @@ const steps = [
 
 const BlankHero = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const videoSrc = "https://customer-cbeadsgr09pnsezs.cloudflarestream.com/6571025a2e02041c8b85dbd43210fa3a/manifest/video.m3u8";
+  const videoSrc = "https://stream.mux.com/Xw9AMwwJ5IHKwfzikjGlxoI3MLaKyLpk74rM01UdMsco.m3u8";
 
   useEffect(() => {
     const video = videoRef.current;
